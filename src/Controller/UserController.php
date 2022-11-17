@@ -74,6 +74,8 @@ class UserController extends AbstractController
      */
     public function editPassword(User $user, EntityManagerInterface $manager, Request $request, UserPasswordHasherInterface $hasher): Response
     {
+        if( !$this->getUser() || $this->getUser() !== $user ) return $this->redirectToRoute("security.login");
+        
         $form = $this->createForm(UserPasswordType::class);
 
         $form->handleRequest($request);
@@ -82,11 +84,9 @@ class UserController extends AbstractController
         { 
             if( $hasher->isPasswordValid($user, $form->getData()['plainPassword']))
             {
-                $user->setPassword( 
-                    $hasher->hashPassword(
-                        $user,
-                        $form->getData()['newPassword']
-                    )
+                $user->setUpdatedAt( new \DateTimeImmutable() );
+                $user->setPlainPassword(
+                    $form->getData()['newPassword']
                 );
 
                 $manager->persist($user);
