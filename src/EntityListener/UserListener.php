@@ -20,10 +20,10 @@ class UserListener
         $this->encodePassword($user);
     }
 
-    public function preUpdate(User $user)
-    {
-        $this->encodePassword($user);
-    }
+    // public function preUpdate(User $user) //! Ne fonctionne pas au moment de la crétion de ce projet
+    // {
+    //     $this->encodePassword($user);
+    // }
 
     public function encodePassword(User $user)
     {
