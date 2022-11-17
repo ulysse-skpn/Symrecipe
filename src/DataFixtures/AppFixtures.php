@@ -1,0 +1,61 @@
+<?php
+
+namespace App\DataFixtures;
+
+use Faker\Factory;
+use App\Entity\User;
+use Faker\Generator;
+use App\Entity\Recipe;
+use DateTimeInterface;
+use App\Entity\Ingredient;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\Validator\Constraints\Time;
+
+class AppFixtures extends Fixture
+{
+    private Generator $faker;
+
+    public function __construct()
+    {
+        $this->faker = Factory::create('fr FR');
+    }
+
+    public function load(ObjectManager $manager): void
+    {
+        for ($i=0; $i <= 50; $i++) 
+        { 
+            $ingredient = new Ingredient();
+            $ingredient->setName($this->faker->words(3,true))
+                        ->setPrice(mt_rand(0,100));
+
+            $recipe = new Recipe();
+            $recipe->setName($this->faker->words(3,true))
+                        ->setTime( new \DateTime() )
+                        ->setNbPerson(mt_rand(1,50))
+                        ->setDifficulty( strval(mt_rand(1,5)) )
+                        ->setInstructions( $this->faker->text )
+                        // ->setIngredientsList( $this->faker->words )
+                        ->setPrice(mt_rand(0,1000))
+                        ->setBookmark( mt_rand(0,1) === 0 ? false : true );
+
+            $manager->persist($ingredient);
+            $manager->persist($recipe);
+        }
+
+        for ($i=0; $i < 10; $i++) 
+        { 
+            $user = new User();
+            $user->setEmail($this->faker->email())
+                ->setFullName($this->faker->name())
+                ->setRoles(["Role user"])
+                ->setPseudo(mt_rand(0,1) === 1 ? $this->faker->firstName() : null)
+                ->setPlainPassword('password');
+
+            $manager->persist($user);
+            $manager->flush();
+        }
+
+        $manager->flush();
+    }
+}

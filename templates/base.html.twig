@@ -7,6 +7,7 @@
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/minty/bootstrap.min.css" integrity="sha384-H4X+4tKc7b8s4GoMrylmy2ssQYpDHoqzPa9aKXbDwPoPUA3Ra8PA5dGzijN+ePnH" crossorigin="anonymous">
         {% endblock %}
 
         {% block javascripts %}
@@ -14,6 +15,21 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        {% block header %}
+            {% include "fragments/navbar.html.twig" %}
+        {% endblock %}
+        {% block body %}
+            <div class="p-5 mb-4 bg-light rounded-3">
+                <div class="container-fluid py-5">
+                    <h1 class="display-5 fw-bold">Symrecipe</h1>
+                    <p class="col-md-8 fs-4">Symrecipe est une application qui permet de créer recettes à base d'ingrédients. Il sera possible de les partager ou de les garder en privé</p>
+                    <hr>
+                    <p class="d-inline-block mx-3">Pour commencer, cliquez sur le bouton connexion</p>
+                    <button class="btn btn-primary btn-lg" type="button">Inscription</button>
+                    <p class="d-inline-block mx-3">Déjà inscrtit ?</p>
+                    <button class="btn btn-info btn-lg" type="button">Connexion</button>
+                </div>
+            </div>
+        {% endblock %}
     </body>
 </html>
