@@ -15,7 +15,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
 
-    #[Route('/user/update/{id}', name: 'user.edit', methods:['GET','POST'])]
     /**
      * Update an User
      *
@@ -24,6 +23,7 @@ class UserController extends AbstractController
      * @param EntityManagerInterface $manager
      * @return Response
      */
+    #[Route('/user/update/{id}', name: 'user.edit', methods:['GET','POST'])]
     public function edit(User $user, Request $request, EntityManagerInterface $manager, UserPasswordHasherInterface $hasher): Response
     {
         if( !$this->getUser() || $this->getUser() !== $user ) return $this->redirectToRoute('security.login');

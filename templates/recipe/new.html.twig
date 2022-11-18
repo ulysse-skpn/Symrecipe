@@ -6,7 +6,7 @@
     <div class="container">
         <h2>Création d'une recette</h2>
 
-        {# {{ form_start(form) }}
+        {{ form_start(form) }}
 
             <div class="form-group">
                 {{ form_label(form.name) }}
@@ -25,9 +25,49 @@
             </div>
 
             <div class="form-group">
+                {{ form_label(form.time) }}
+                {{ form_widget(form.time) }}
+                <div class="form-error text-danger">
+                    {{ form_errors(form.time) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.nbPerson) }}
+                {{ form_widget(form.nbPerson) }}
+                <div class="form-error text-danger">
+                    {{ form_errors(form.nbPerson) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.difficulty) }}
+                {{ form_widget(form.difficulty) }}
+                <div class="form-error text-danger">
+                    {{ form_errors(form.difficulty) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.instructions) }}
+                {{ form_widget(form.instructions) }}
+                <div class="form-error text-danger">
+                    {{ form_errors(form.instructions) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.bookmark) }}
+                {{ form_widget(form.bookmark) }}
+                <div class="form-error text-danger">
+                    {{ form_errors(form.bookmark) }}
+                </div>
+            </div>
+
+            <div class="form-group">
                 {{ form_row(form.submit) }}
             </div>
-        {{ form_end(form) }} #}
+        {{ form_end(form) }}
 
     </div>
 {% endblock %}
