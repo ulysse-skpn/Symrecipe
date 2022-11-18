@@ -7,6 +7,8 @@ use App\Form\IngredientType;
 use App\Repository\IngredientRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,6 +25,7 @@ class IngredientController extends AbstractController
      * @return Response
      */
     #[Route('/ingredient', name: 'ingredients', methods:['GET'])]
+    #[IsGranted("ROLE_USER")]
     public function index(IngredientRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $ingredients = $paginator->paginate(
@@ -45,6 +48,7 @@ class IngredientController extends AbstractController
      * @return Response
      */
     #[Route('/ingredient/new', name: 'ingredient.new', methods:['GET','POST'])]
+    #[IsGranted("ROLE_USER")]
     public function new_ingredient(Request $request, EntityManagerInterface $manager): Response
     {
         $ingredient = new Ingredient();
@@ -75,7 +79,16 @@ class IngredientController extends AbstractController
         ]);
     }
 
+    /**
+     * Update an ingredient
+     *
+     * @param Ingredient $ingredient
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     #[Route('/ingredient/edit/{id}', name: 'ingredient.edit', methods:['GET','POST'])]
+    #[Security("is_granted('ROLE_USER') and user === ingredient.getUser()")]
     public function edit(Ingredient $ingredient, Request $request, EntityManagerInterface $manager): Response
     {
         $form = $this->createForm(IngredientType::class, $ingredient);
@@ -103,7 +116,15 @@ class IngredientController extends AbstractController
         ]);
     }
 
+    /**
+     * Delete an ingredient
+     *
+     * @param EntityManagerInterface $manager
+     * @param Ingredient $ingredient
+     * @return Response
+     */
     #[Route('/ingredient/delete/{id}', name: 'ingredient.delete', methods:['GET','DELETE'])]
+    #[Security("is_granted('ROLE_USER') and user === ingredient.getUser()")]
     public function FunctionName(EntityManagerInterface $manager, Ingredient $ingredient): Response
     {   
         if( !$ingredient )  

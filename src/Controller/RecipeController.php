@@ -10,6 +10,8 @@ use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class RecipeController extends AbstractController
@@ -23,6 +25,7 @@ class RecipeController extends AbstractController
      * @return Response
      */
     #[Route('/recipe', name: 'recipes', methods:['GET'])]
+    #[IsGranted("ROLE_USER")]
     public function index(RecipeRepository $repository, PaginatorInterface $paginator, Request $request): Response
     {
         $recipes = $paginator->paginate(
@@ -46,6 +49,7 @@ class RecipeController extends AbstractController
      * @return Response
      */
     #[Route('/recipe/new', name: 'recipe.new', methods:['GET','POST'])]
+    #[IsGranted("ROLE_USER")]
     public function new(EntityManagerInterface $manager, Request $request): Response
     {
         $recipe = new Recipe();
@@ -76,7 +80,16 @@ class RecipeController extends AbstractController
         ]);
     }
 
+    /**
+     * Update a recipe
+     *
+     * @param Recipe $recipe
+     * @param EntityManagerInterface $manager
+     * @param Request $request
+     * @return Response
+     */
     #[Route('/recipe/{id}', name: 'recipe.edit', methods:['GET','POST'])]
+    #[Security("is_granted('ROLE_USER') and user === recipe.getUser()")]
     public function edit(Recipe $recipe, EntityManagerInterface $manager, Request $request): Response
     {
         $form = $this->createForm(RecipeType::class, $recipe);
@@ -101,7 +114,16 @@ class RecipeController extends AbstractController
         ]);
     }
 
+
+    /**
+     * Delete a recipe
+     *
+     * @param Recipe $recipe
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     #[Route('/recipe/{id}', name: 'recipe.delete', methods:['GET','DELETE'])]
+    #[Security("is_granted('ROLE_USER') and user === recipe.getUser()")]
     public function delete(Recipe $recipe, EntityManagerInterface $manager): Response
     {
         if(!$recipe)

@@ -13,6 +13,13 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
+
+    /**
+     * Sign in the app
+     *
+     * @param AuthenticationUtils $authenticationUtils
+     * @return Response
+     */
     #[Route('/login', name: 'security.login', methods:['GET','POST'])]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -22,6 +29,13 @@ class SecurityController extends AbstractController
         ]);
     }
 
+    /**
+     * Register / sign up in the app
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     #[Route('/register', name: 'security.register', methods:['GET','POST'])]
     public function register(Request $request, EntityManagerInterface $manager): Response
     {

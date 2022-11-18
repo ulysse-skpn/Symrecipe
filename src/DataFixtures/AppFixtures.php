@@ -30,7 +30,7 @@ class AppFixtures extends Fixture
             $user = new User();
             $user->setEmail($this->faker->email())
                 ->setFullName($this->faker->name())
-                ->setRoles(["Role user"])
+                ->setRoles(["ROLE_USER"])
                 ->setPseudo(mt_rand(0,1) === 1 ? $this->faker->firstName() : null)
                 ->setPlainPassword('password');
 
