@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Rating;
 use App\Entity\Recipe;
+use App\Form\RatingType;
 use App\Form\RecipeType;
+use App\Repository\RatingRepository;
 use App\Repository\RecipeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -86,12 +89,49 @@ class RecipeController extends AbstractController
      * @param Recipe $recipe
      * @return Response
      */
-    #[Route('/recipe/show/{id}', name: 'recipe.show', methods:['GET'])]
+    #[Route('/recipe/show/{id}', name: 'recipe.show', methods:['GET','POST'])]
     #[Security("is_granted('ROLE_USER') and recipe.getIsPublic() === true")]
-    public function show(Recipe $recipe): Response
+    public function show(Recipe $recipe, Request $request, RatingRepository $repository, EntityManagerInterface $manager): Response
     {
+        $rating  = new Rating();
+        $form = $this->createForm(RatingType::class, $rating);
+
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) 
+        {
+            $rating->setUser( $this->getUser() )
+                    ->setRecipe($recipe);
+
+            $existingRating = $repository->findOneBy([
+                'user' => $this->getUser(),
+                'recipe' => $recipe
+            ]);
+
+            if( !$existingRating )
+            {
+                $manager->persist($rating);
+            }
+            else
+            {
+                $existingRating->setRating(
+                    $form->getData()->getRating()
+                );
+            }
+
+            $manager->flush();
+
+            $this->addFlash(
+                'success',
+                'Votre notre à bien été pris en compte'
+            );
+
+            return $this->redirectToRoute("recipe.show", ['id' => $recipe->getId() ]);
+        }
+
         return $this->render("recipe/show.html.twig", [
-            "recipe" => $recipe
+            "recipe" => $recipe,
+            "form" => $form->createView()
         ]);
     }
 
@@ -121,12 +161,14 @@ class RecipeController extends AbstractController
                 'success',
                 'Recette modifiée avec succès'
             );
+
+            return $this->redirectToRoute('recipes');
         }
 
-        return $this->redirectToRoute('recipes');
         
-        return $this->render('recipe/index.html.twig', [
+        return $this->render('recipe/edit.html.twig', [
             'recipe' => $recipe,
+            'form' => $form->createView()
         ]);
     }
 

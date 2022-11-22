@@ -71,11 +71,17 @@ class Recipe
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    #[ORM\OneToMany(mappedBy: 'recipe', targetEntity: Rating::class, orphanRemoval: true)]
+    private Collection $ratings;
+
+    private ?float $average = null ; 
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
         $this->ingredientsList = new ArrayCollection();
+        $this->ratings = new ArrayCollection();
     }
 
     #[ORM\PrePersist()]
@@ -245,5 +251,57 @@ class Recipe
         $this->user = $user;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Rating>
+     */
+    public function getRatings(): Collection
+    {
+        return $this->ratings;
+    }
+
+    public function addRating(Rating $rating): self
+    {
+        if (!$this->ratings->contains($rating)) {
+            $this->ratings->add($rating);
+            $rating->setRecipe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRating(Rating $rating): self
+    {
+        if ($this->ratings->removeElement($rating)) {
+            // set the owning side to null (unless already changed)
+            if ($rating->getRecipe() === $this) {
+                $rating->setRecipe(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * Get the value of average
+     */ 
+    public function getAverage()
+    {
+        $ratings = $this->ratings;
+
+        if( $ratings->toArray() === [] ) return $this->average = null;
+
+        $total = 0;
+
+        foreach ($ratings as $rating) 
+        {
+            $total += $rating->getRating();
+        }
+
+        $this->average = $total / count($ratings);
+
+        return $this->average;
     }
 }

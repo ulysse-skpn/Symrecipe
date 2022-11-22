@@ -7,7 +7,7 @@
         <h2>Modification d'une recette</h2>
         <p><u>Nom de la recette : {{ recipe.name }}</u></p>
         
-        {# {{ form_start(form) }}
+        {{ form_start(form) }}
 
             <div class="form-group">
                 {{ form_label(form.name) }}
@@ -28,7 +28,7 @@
             <div class="form-group">
                 {{ form_row(form.submit) }}
             </div>
-        {{ form_end(form) }} #}
+        {{ form_end(form) }}
 
     </div>
 {% endblock %}

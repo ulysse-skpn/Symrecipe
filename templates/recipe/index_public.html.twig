@@ -23,9 +23,12 @@
                                 <div class="card-header d-flex justify-content-between">
                             {% endif %}
                                 <span>Auteur : {{ recipe.user.id == app.user.id ? "Ma recette" : recipe.user.fullName }}</span>
-                                <span>n° : {{ recipe.id }}</span>
+                                {% if recipe.average  %}
+                                    <span>Note : {{ recipe.average|number_format(1) }}</span>
+                                {% endif %}
                             </div>
-                            <div class="card-body">
+                            <div class="card-body pt-1">
+                                <small>recette n° : {{ recipe.id }}</small>
                                 <h5 class="card-title">{{ recipe.name|capitalize }}</h5>
                                 <p class="card-text">{{ recipe.instructions|slice(0,100) ~ "..." }}</p>
                             </div>
@@ -37,5 +40,6 @@
         {% else %}
             <h4 class="mt-4">Pas d'ingrédients</h4>
         {% endif %}
+
     </div>
 {% endblock %}

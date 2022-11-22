@@ -6,7 +6,17 @@
     <div class="container">
         <h2 class="mt-4">{{ recipe.name|upper }}</h2>
 
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
+
         <span class="badge bg-secondary my-3">Crée le {{ recipe.createdAt|date("d/m/Y") }}</span>
+        {% if recipe.average %}
+            <span class="badge bg-secondary my-3">Note : {{ recipe.average|number_format(1) }} / 5</span>
+        {% endif %}
+        
 
         {% if recipe.time %}
             <legend>Temps : {{ recipe.time|date('i:s') }}</legend>
@@ -40,5 +50,19 @@
         {% for ingredient in recipe.ingredientsList %}
             <span class="badge bg-info">{{ ingredient.name }}</span>
         {% endfor %}
+
+        {% if app.user.id == recipe.user.id %}            
+            <div class="mt-5">
+                <a href="{{ path('recipe.edit', {id: recipe.id}) }}">
+                    <button class="btn btn-primary">Modifier recette</button>
+                </a>
+            </div>
+        {% endif %}
+
+        <hr>
+
+        <legend>Noter la recette</legend>
+        {{ form(form) }}
+
     </div>
 {% endblock %}

@@ -6,11 +6,10 @@ use Faker\Factory;
 use App\Entity\User;
 use Faker\Generator;
 use App\Entity\Recipe;
-use DateTimeInterface;
 use App\Entity\Ingredient;
+use App\Entity\Rating;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Symfony\Component\Validator\Constraints\Time;
 
 class AppFixtures extends Fixture
 {
@@ -54,6 +53,7 @@ class AppFixtures extends Fixture
         }
 
         // Recipes
+        $recipes = [];
         for ($i=0; $i <= 15; $i++) 
         { 
             $recipe = new Recipe();
@@ -73,7 +73,24 @@ class AppFixtures extends Fixture
                 $recipe->addIngredientsList($ingredients[mt_rand(0, count($ingredients) - 1)]);
             }
 
+            $recipes[] = $recipe;
+
             $manager->persist($recipe);
+        }
+
+        // Ratings
+        foreach ($recipes as $recipe) 
+        {
+            for ($i=0; $i < mt_rand(0,5) ; $i++) 
+            { 
+                $rating = new Rating();
+                $rating->setRating(mt_rand(1,5))
+                        ->setUser($users[mt_rand(0, count($users) - 1)])
+                        ->setRecipe($recipe)
+                ;
+
+                $manager->persist($rating);
+            }
         }
 
         $manager->flush();
