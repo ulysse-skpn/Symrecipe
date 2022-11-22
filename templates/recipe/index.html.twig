@@ -27,14 +27,16 @@
                         <th>Temps</th>
                         <th>Nb personne(s)</th>
                         <th>Difficulté</th>
-                        <th>Instructions</th>
-                        <th>Ingrédients</th>
+                        {# <th>Instructions</th>
+                        <th>Ingrédients</th> #}
                         <th>Favoris</th>
                         <th>Prix</th>
                         <th>Date de création</th>
                         <th>Date de modification</th>
                         <th>Modifier</th>
                         <th>Supprimer</th>
+                        <th>Partager</th>
+                        <th>Statut</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -45,8 +47,8 @@
                             <td>{{ recipe.time|date('H:i:s') }}</td>
                             <td>{{ recipe.nbPerson }}</td>
                             <td>{{ recipe.difficulty }}</td>
-                            <td><a href="#" class="btn btn-warning">Instructions</a></td>
-                            <td><a href="#" class="btn btn-warning">Ingrédients</a></td>
+                            {# <td><a href="#" class="btn btn-warning">Instructions</a></td>
+                            <td><a href="#" class="btn btn-warning">Ingrédients</a></td> #}
                             {% if recipe.bookmark == 1 %}
                                 <td>O</td>
                             {% else %}
@@ -60,6 +62,12 @@
                             </td>
                             <td>
                                 <a href="{{ path('recipe.delete' , {id: recipe.id}) }}" class="btn btn-danger">Supprimer</a>
+                            </td>
+                            <td>
+                                <a href="{{ path('recipe.toggle.public' , {id: recipe.id}) }}" class="btn btn-warning">Partager</a>
+                            </td>
+                            <td>
+                                {{ recipe.isPublic == 1 ? "Partagée" : "Non partagée" }}
                             </td>
                         </tr>
                     {% endfor %}

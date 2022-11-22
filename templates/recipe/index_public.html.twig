@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Symrecipe - Recettes publiques{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        {% if not recipes is same as ([]) %}
+
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-primary">{{ message }}</div>
+            {% endfor %}
+
+            <legend class="mt-4">Recettes publiques</legend>
+
+            <div class="d-flex flex-wrap justify-content-between">           
+                {% for recipe in recipes %}
+                    <a href="{{ path('recipe.show', {id: recipe.id}) }}">   
+                        <div class="card border-success mb-3 text-dark" style="max-width: 20rem;">
+                            {% if app.user.id == recipe.user.id  %}
+                                <div class="card-header bg-success text-light d-flex justify-content-between">
+                            {% else %}
+                                <div class="card-header d-flex justify-content-between">
+                            {% endif %}
+                                <span>Auteur : {{ recipe.user.id == app.user.id ? "Ma recette" : recipe.user.fullName }}</span>
+                                <span>n° : {{ recipe.id }}</span>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ recipe.name|capitalize }}</h5>
+                                <p class="card-text">{{ recipe.instructions|slice(0,100) ~ "..." }}</p>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>                
+
+        {% else %}
+            <h4 class="mt-4">Pas d'ingrédients</h4>
+        {% endif %}
+    </div>
+{% endblock %}

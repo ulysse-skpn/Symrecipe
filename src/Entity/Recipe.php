@@ -54,6 +54,9 @@ class Recipe
     private ?bool $bookmark = null;
 
     #[ORM\Column]
+    private ?bool $isPublic = null;
+
+    #[ORM\Column]
     #[Assert\NotNull()]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -167,6 +170,19 @@ class Recipe
     public function setBookmark(?bool $bookmark): self
     {
         $this->bookmark = $bookmark;
+
+        return $this;
+    }
+
+    
+    public function getIsPublic(): ?bool
+    {
+        return $this->isPublic;
+    }
+
+    public function setIsPublic(bool $isPublic): self
+    {
+        $this->isPublic = $isPublic;
 
         return $this;
     }

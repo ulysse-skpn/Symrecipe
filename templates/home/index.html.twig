@@ -4,21 +4,38 @@
 
 {% block body %}
     <div class="container">
-        <h2>Page d'accueil</h2>
+        {% if app.user %}
+            <legend class="my-4">Dernière(s) recettes ajoutée(s)</legend>
 
-        <p>
-            Symrecipe est une application qui permet de créer des recettes à base d'ingrédients que l'on pourra créer et ces recettes pourront être partagé à la communauté
-        </p>
+            <div class="d-flex flex-wrap justify-content-between">           
+                {% for recipe in recipes %}
+                    <a href="{{ path('recipe.show', {id: recipe.id}) }}">             
+                        <div class="card border-success mb-3 text-dark" style="max-width: 20rem; max-height:15rem; overflow:hidden">
+                            <div class="card-header">Auteur : {{ recipe.user.fullName }}</div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ recipe.name|capitalize }}</h5>
+                                <p class="card-text">{{ recipe.instructions|slice(0,100) ~ "..." }}</p>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <h2>Page d'accueil</h2>
 
-        <hr>
+            <p>
+                Symrecipe est une application qui permet de créer des recettes à base d'ingrédients que l'on pourra créer et ces recettes pourront être partagé à la communauté
+            </p>
 
-        <p>Pour commencer veuillez cliquez sur le bouton ci-dessous</p>
+            <hr>
 
-        <a href="{{ path('security.register') }}"><button class="btn btn-warning">Inscription</button></a>
-        
-        <p>Déjà inscrit ? Cliquez ici</p>
+            <p>Pour commencer veuillez cliquez sur le bouton ci-dessous</p>
 
-        <a href="{{ path('security.login') }}"><button class="btn btn-warning">Connexion</button></a>
-        
+            <a href="{{ path('security.register') }}"><button class="btn btn-warning">Inscription</button></a>
+            
+            <p>Déjà inscrit ? Cliquez ici</p>
+
+            <a href="{{ path('security.login') }}"><button class="btn btn-warning">Connexion</button></a>
+        {% endif %}
     </div>
 {% endblock %}

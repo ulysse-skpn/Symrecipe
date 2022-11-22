@@ -81,6 +81,22 @@ class RecipeController extends AbstractController
     }
 
     /**
+     * Show recipe if the recipe is public
+     *
+     * @param Recipe $recipe
+     * @return Response
+     */
+    #[Route('/recipe/show/{id}', name: 'recipe.show', methods:['GET'])]
+    #[Security("is_granted('ROLE_USER') and recipe.getIsPublic() === true")]
+    public function show(Recipe $recipe): Response
+    {
+        return $this->render("recipe/show.html.twig", [
+            "recipe" => $recipe
+        ]);
+    }
+
+
+    /**
      * Update a recipe
      *
      * @param Recipe $recipe
@@ -88,7 +104,7 @@ class RecipeController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    #[Route('/recipe/{id}', name: 'recipe.edit', methods:['GET','POST'])]
+    #[Route('/recipe/edit/{id}', name: 'recipe.edit', methods:['GET','POST'])]
     #[Security("is_granted('ROLE_USER') and user === recipe.getUser()")]
     public function edit(Recipe $recipe, EntityManagerInterface $manager, Request $request): Response
     {
@@ -122,7 +138,7 @@ class RecipeController extends AbstractController
      * @param EntityManagerInterface $manager
      * @return Response
      */
-    #[Route('/recipe/{id}', name: 'recipe.delete', methods:['GET','DELETE'])]
+    #[Route('/recipe/delete/{id}', name: 'recipe.delete', methods:['GET','DELETE'])]
     #[Security("is_granted('ROLE_USER') and user === recipe.getUser()")]
     public function delete(Recipe $recipe, EntityManagerInterface $manager): Response
     {
@@ -141,6 +157,49 @@ class RecipeController extends AbstractController
         $this->addFlash(
             'success',
             'Recette supprimée avec succès'
+        );
+
+        return $this->redirectToRoute('recipes');
+    }
+
+    #[Route('/recipe/public/{nbRecipes}', name: 'recipe.public', methods:['GET'], defaults:["nbRecipes" => 20])]
+    public function index_public(PaginatorInterface $paginator, RecipeRepository $repository, Request $request, int $nbRecipes): Response
+    {
+        $recipes = $paginator->paginate(
+            $repository->findPublicRecipe($nbRecipes),
+            $request->query->getInt('page',1),
+            10
+        );
+
+        return $this->render("recipe/index_public.html.twig",[
+            "recipes" => $recipes
+        ]);
+    }
+
+    #[Route('/recipe/toggle_public_recipe/{id}', name:"recipe.toggle.public", methods:['GET','POST'])]
+    #[Security("is_granted('ROLE_USER') and user === recipe.getUser()")]
+    public function toggle_public_recipe(Recipe $recipe, EntityManagerInterface $manager): Response
+    {
+        if(!$recipe)
+        {
+            $this->addFlash(
+                'warning',
+                "Un problème avec la recette est survenu"
+            );
+            return $this->redirectToRoute('recipes');
+        }
+
+        $recipe->setIsPublic( !$recipe->getIsPublic() );
+
+        if( $recipe->getIsPublic() === true ) $message = "Recette partagée avec succès";
+        else $message = "La recette n'est plus publique";
+
+        $manager->persist($recipe);
+        $manager->flush();
+
+        $this->addFlash(
+            'success',
+            $message
         );
 
         return $this->redirectToRoute('recipes');
