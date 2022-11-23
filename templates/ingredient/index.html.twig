@@ -7,8 +7,10 @@
         
         {% if not ingredientList is same as ([]) %}
 
-        {% for message in app.flashes('success') %}
-            <div class="alert alert-primary">{{ message }}</div>
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">{{ message }}</div>
+            {% endfor %}
         {% endfor %}
 
             <h2>

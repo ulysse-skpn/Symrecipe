@@ -7,10 +7,6 @@
 
         {% if not recipes is same as ([]) %}
 
-            {% for message in app.flashes('success') %}
-                <div class="alert alert-primary">{{ message }}</div>
-            {% endfor %}
-
             <legend class="mt-4">Recettes publiques</legend>
 
             <div class="d-flex flex-wrap justify-content-between">           
