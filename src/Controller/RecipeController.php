@@ -112,7 +112,7 @@ class RecipeController extends AbstractController
             {
                 $manager->persist($rating);
             }
-            else
+            else    //? Pas sûr de l'utilité pour le moment
             {
                 $existingRating->setRating(
                     $form->getData()->getRating()

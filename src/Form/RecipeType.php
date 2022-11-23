@@ -56,8 +56,7 @@ class RecipeType extends AbstractType
                 "required" => false,
                 "attr" =>
                 [
-                    "class => 'form-control",
-                    // 'max' => new \DateTime()
+                    "class => 'form-control"
                 ],
                 "label" => "Temps de préparation",
                 "label_attr" => [ "class" => 'form-label' ],
@@ -106,7 +105,6 @@ class RecipeType extends AbstractType
                 "label" => "Instructions",
                 "label_attr" => [ "class" => 'form-label' ]
             ])
-            // ->add('ingredientsList', TextareaType::class)
             ->add('price', MoneyType::class, 
             [
                 "required" => false,
@@ -140,22 +138,22 @@ class RecipeType extends AbstractType
                 ],
                 'label' => "Enregister"
             ])
-            // ->add("ingredients", EntityType::class,
-            // [
-            //     "class" => Ingredient::class,
-            //     "query_builder" => function (IngredientRepository $repository)
-            //                         {
-            //                             return $repository->createQueryBuilder('i')
-            //                                                 ->where('i.user = :user')
-            //                                                 ->orderBy('i.name','ASC')
-            //                                                 ->setParameter('user' , $this->token->getToken()->getUser());
-            //                         },
-            //     "label" => "<legend>Mes ingrédients</legend>", //?
-            //     "label_attr" => [ "class" => "form-label" ],
-            //     "choice_label" => "name",
-            //     "multiple" => true,
-            //     "expanded" => true
-            // ])
+            ->add("ingredientsList", EntityType::class,
+            [
+                "class" => Ingredient::class,
+                "query_builder" => function (IngredientRepository $repository)
+                                    {
+                                        return $repository->createQueryBuilder('i')
+                                                            ->where('i.user = :user')
+                                                            ->orderBy('i.name','ASC')
+                                                            ->setParameter('user' , $this->token->getToken()->getUser());
+                                    },
+                "label" => "Mes ingrédients",
+                "label_attr" => [ "class" => "form-label mt-4" ],
+                "choice_label" => "name",
+                "multiple" => true,
+                "expanded" => true
+            ])
         ;
     }
 
