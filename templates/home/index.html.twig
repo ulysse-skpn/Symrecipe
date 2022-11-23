@@ -7,6 +7,12 @@
         {% if app.user %}
             <legend class="my-4">Dernière(s) recettes ajoutée(s)</legend>
 
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">{{ message }}</div>
+                {% endfor %}
+            {% endfor %}
+
             <div class="d-flex flex-wrap justify-content-between">           
                 {% for recipe in recipes %}
                     <a href="{{ path('recipe.show', {id: recipe.id}) }}">             

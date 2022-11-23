@@ -6,12 +6,6 @@
     <div class="container">
         <legend class="mt-4">Formulaire de contact</legend>
 
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ label }}">{{ message }}</div>
-            {% endfor %}
-        {% endfor %}
-
         {{ form(form) }}
     </div>
 {% endblock %}

@@ -9,11 +9,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 class ContactController extends AbstractController
 {
     #[Route('/contact', name: 'contact')]
-    public function index(Request $request, EntityManagerInterface $manager): Response
+    public function index(Request $request, EntityManagerInterface $manager, MailerInterface $mailer): Response
     {
         $contact = new Contact();
         
@@ -33,6 +36,19 @@ class ContactController extends AbstractController
 
             $manager->persist($contact);
             $manager->flush();
+
+            // $email = (new Email())
+            $email = (new TemplatedEmail())
+            ->from($contact->getEmail())
+            ->to('you@example.com')
+            ->subject($contact->getSubject())
+            ->htmlTemplate('email/contact.html.twig')   // path of the Twig template to render
+            ->context([
+                'contact' => $contact
+            ])
+            ;
+
+            $mailer->send($email);
 
             $this->addFlash(
                 "success",

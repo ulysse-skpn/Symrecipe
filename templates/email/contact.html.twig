@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Symrecipe - Contact{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <legend class="mt-4">Demande de {{ contact.fullName }}</legend>
+
+        <p>Email : {{ contact.email }}</p>
+        <p>Sujet : {{ contact.subject }}</p>
+        <p>Messa : </p>
+        <div>
+            {{ contact.message }}
+        </div>
+
+    </div>
+{% endblock %}
