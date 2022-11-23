@@ -16,23 +16,43 @@
             <div class="d-flex flex-wrap justify-content-between">           
                 {% for recipe in recipes %}
                     <a href="{{ path('recipe.show', {id: recipe.id}) }}">   
-                        <div class="card border-success mb-3 text-dark" style="max-width: 20rem;">
-                            {% if app.user.id == recipe.user.id  %}
+
+                        <div class="card border-success mb-3 text-dark" style="max-width: 20rem;"> 
+
+                            {# If user is not connected #}
+                            {% if app.user == null %}
+                                <div class="card-header d-flex justify-content-between">
+                                    <span>Auteur : {{ recipe.user.fullName }}</span>
+                                    {% if recipe.average  %}
+                                        <span>Note : {{ recipe.average|number_format(1) }}</span>
+                                    {% endif %}
+                                </div>
+                                <div class="card-body pt-1">
+                                    <small>recette n° : {{ recipe.id }}</small>
+                                    <h5 class="card-title">{{ recipe.name|capitalize }}</h5>
+                                    <p class="card-text">{{ recipe.instructions|slice(0,100) ~ "..." }}</p>
+                                </div>
+                            {% else %}
+                            
+                            {# If user is connected #}
+                            {% if app.user and app.user.id == recipe.user.id  %}
                                 <div class="card-header bg-success text-light d-flex justify-content-between">
                             {% else %}
                                 <div class="card-header d-flex justify-content-between">
                             {% endif %}
-                                <span>Auteur : {{ recipe.user.id == app.user.id ? "Ma recette" : recipe.user.fullName }}</span>
-                                {% if recipe.average  %}
-                                    <span>Note : {{ recipe.average|number_format(1) }}</span>
-                                {% endif %}
-                            </div>
-                            <div class="card-body pt-1">
-                                <small>recette n° : {{ recipe.id }}</small>
-                                <h5 class="card-title">{{ recipe.name|capitalize }}</h5>
-                                <p class="card-text">{{ recipe.instructions|slice(0,100) ~ "..." }}</p>
-                            </div>
+                                    <span>Auteur : {{ recipe.user.id == app.user.id ? "Ma recette" : recipe.user.fullName }}</span>
+                                    {% if recipe.average  %}
+                                        <span>Note : {{ recipe.average|number_format(1) }}</span>
+                                    {% endif %}
+                                </div>
+                                <div class="card-body pt-1">
+                                    <small>recette n° : {{ recipe.id }}</small>
+                                    <h5 class="card-title">{{ recipe.name|capitalize }}</h5>
+                                    <p class="card-text">{{ recipe.instructions|slice(0,100) ~ "..." }}</p>
+                                </div>
+                            {% endif %}
                         </div>
+
                     </a>
                 {% endfor %}
             </div>                
