@@ -1,17 +1,22 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Symrecipe - Contact{% endblock %}
-
-{% block body %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symrecipe - Contact</title>
+</head>
+<body>
     <div class="container">
         <legend class="mt-4">Demande de {{ contact.fullName }}</legend>
 
         <p>Email : {{ contact.email }}</p>
         <p>Sujet : {{ contact.subject }}</p>
-        <p>Messa : </p>
+        <p>Message : </p>
         <div>
             {{ contact.message }}
         </div>
 
     </div>
-{% endblock %}
+</body>
+</html>
