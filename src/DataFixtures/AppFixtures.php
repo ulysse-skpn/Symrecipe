@@ -72,11 +72,10 @@ class AppFixtures extends Fixture
         { 
             $recipe = new Recipe();
             $recipe->setName($this->faker->words(3,true))
-                    ->setTime( new \DateTime() )
+                    ->setTime(mt_rand(0,1) === 1 ? mt_rand(1,1440) : null)
                     ->setNbPerson(mt_rand(0,1) === 1 ? mt_rand(1,50) : null)
                     ->setDifficulty( mt_rand(0,1) === 1 ? strval(mt_rand(1,5)) : null )
                     ->setInstructions( $this->faker->text(300) )
-                    // ->setIngredientsList( $this->faker->words )
                     ->setPrice(mt_rand(0,1) === 1 ? mt_rand(0,1000) : null)
                     ->setBookmark( mt_rand(0,1) === 0 ? false : true )
                     ->setIsPublic( mt_rand(0,1) === 0 ? false : true )

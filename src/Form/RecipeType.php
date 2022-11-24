@@ -51,19 +51,21 @@ class RecipeType extends AbstractType
                     new Assert\NotBlank()
                 ]
             ])
-            ->add('time', TimeType::class,
+            ->add('time', IntegerType::class,
             [
                 "required" => false,
                 "attr" =>
                 [
-                    "class => 'form-control"
+                    "class => 'form-control",
+                    "min" => 1,
+                    "max" => 60*24,
                 ],
-                "label" => "Temps de préparation",
+                "label" => "Temps de préparation (en minutes)",
                 "label_attr" => [ "class" => 'form-label' ],
                 "constraints" => 
                 [
-                    new Assert\LessThan(1),
-                    new Assert\GreaterThan(60*24),
+                    new Assert\Positive(),
+                    new Assert\LessThan((60*24)+1),
                 ]
             ])
             ->add('nbPerson', IntegerType::class,

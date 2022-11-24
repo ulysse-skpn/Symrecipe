@@ -34,7 +34,7 @@
                         <th>Favoris</th>
                         <th>Prix</th>
                         <th>Date de création</th>
-                        <th>Date de modification</th>
+                        <th>Date de modification</th>                          
                         <th>Consulter</th>
                         <th>Modifier</th>
                         <th>Supprimer</th>
@@ -48,7 +48,7 @@
                         <tr>              
                             <td>{{ recipe.id }}</td>
                             <td>{{ recipe.name }}</td>
-                            <td>{{ recipe.time|date('H:i:s') }}</td>
+                            <td>{{ recipe.time|min_to_hour }}</td>
                             <td>{{ recipe.nbPerson }}</td>
                             <td>{{ recipe.difficulty }}</td>
                             {# <td><a href="#" class="btn btn-warning">Instructions</a></td>

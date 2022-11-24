@@ -30,9 +30,6 @@ class Recipe
     )]
     private ?string $name = null;
 
-    #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $time = null;
-
     #[ORM\Column(nullable: true)]
     #[Assert\Length(
         max:50
@@ -76,7 +73,10 @@ class Recipe
     #[ORM\OneToMany(mappedBy: 'recipe', targetEntity: Rating::class, orphanRemoval: true)]
     private Collection $ratings;
 
-    private ?float $average = null ; 
+    private ?float $average = null ;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $time = null; 
 
     public function __construct()
     {
@@ -105,18 +105,6 @@ class Recipe
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getTime(): ?\DateTimeInterface
-    {
-        return $this->time;
-    }
-
-    public function setTime(?\DateTimeInterface $time): self
-    {
-        $this->time = $time;
 
         return $this;
     }
@@ -305,5 +293,17 @@ class Recipe
         $this->average = $total / count($ratings);
 
         return $this->average;
+    }
+
+    public function getTime(): ?int
+    {
+        return $this->time;
+    }
+
+    public function setTime(?int $time): self
+    {
+        $this->time = $time;
+
+        return $this;
     }
 }

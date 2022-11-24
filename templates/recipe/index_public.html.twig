@@ -11,7 +11,11 @@
 
             <div class="d-flex flex-wrap justify-content-between">           
                 {% for recipe in recipes %}
-                    <a href="{{ path('recipe.show', {id: recipe.id}) }}">   
+                    {% if app.user and app.user.id == recipe.user.id %}
+                    <a href="{{ path('recipe.show', {id: recipe.id}) }}">  
+                    {% else %}
+                    <a href="{{ path('recipe.show.public', {id: recipe.id}) }}">  
+                    {% endif %}
 
                         <div class="card border-success mb-3 text-dark" style="max-width: 20rem;"> 
 

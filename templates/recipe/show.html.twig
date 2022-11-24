@@ -19,30 +19,30 @@
         
 
         {% if recipe.time %}
-            <legend>Temps : {{ recipe.time|date('i:s') }}</legend>
+            <legend>Temps : {{ recipe.time|min_to_hour }}</legend>
         {% else %}
-            Temps non renseigné    
+            <legend>Temps non renseigné</legend>    
         {% endif %}
 
         {% if recipe.nbPerson %}
             <legend>Pour {{ recipe.nbPerson }} personne(s)</legend>
         {% else %}
-            Nombre de personnes non renseigné 
+            <legend>Nombre de personnes non renseigné</legend> 
         {% endif %}
 
         {% if recipe.difficulty %}
             <legend>Difficulté : {{ recipe.difficulty }}</legend>
         {% else %}
-            Difficulté non renseignée
+            <legend>Difficulté non renseignée</legend>
         {% endif %}
 
         {% if recipe.price %}
             <legend>Prix (€) : {{ recipe.price }}</legend>
         {% else %}
-            Prix non renseigné 
+            <legend>Prix non renseigné</legend> 
         {% endif %}
 
-        <div>
+        <div class="mt-4">
             Instructions : {{ recipe.instructions }}
         </div>
 
@@ -51,18 +51,20 @@
             <span class="badge bg-info">{{ ingredient.name }}</span>
         {% endfor %}
 
-        {% if app.user.id == recipe.user.id %}            
-            <div class="mt-5">
-                <a href="{{ path('recipe.edit', {id: recipe.id}) }}">
-                    <button class="btn btn-primary">Modifier recette</button>
-                </a>
-            </div>
+        {% if app.user and app.user.id == recipe.user.id %}            
+                <div class="mt-5">
+                    <a href="{{ path('recipe.edit', {id: recipe.id}) }}">
+                        <button class="btn btn-primary">Modifier recette</button>
+                    </a>
+                </div>
+
+            <hr>    
+        
+            <legend>Noter la recette</legend>
+
+            {{ form(form) }}
+            
         {% endif %}
-
-        <hr>
-
-        <legend>Noter la recette</legend>
-        {{ form(form) }}
 
     </div>
 {% endblock %}

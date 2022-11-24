@@ -84,13 +84,13 @@ class RecipeController extends AbstractController
     }
 
     /**
-     * Show recipe if the recipe is public
+     * Show details user recipe by id
      *
      * @param Recipe $recipe
      * @return Response
      */
     #[Route('/recipe/show/{id}', name: 'recipe.show', methods:['GET','POST'])]
-    #[Security("is_granted('ROLE_USER') and recipe.getIsPublic() === true")]
+    #[Security("is_granted('ROLE_USER')")]
     public function show(Recipe $recipe, Request $request, RatingRepository $repository, EntityManagerInterface $manager): Response
     {
         $rating  = new Rating();
@@ -132,6 +132,22 @@ class RecipeController extends AbstractController
         return $this->render("recipe/show.html.twig", [
             "recipe" => $recipe,
             "form" => $form->createView()
+        ]);
+    }
+
+
+
+    /**
+     * Show details public recipe by id
+     *
+     * @param Recipe $recipe
+     * @return Response
+     */
+    #[Route('/recipe/show/public/{id}', name: 'recipe.show.public', methods:['GET','POST'])]
+    public function show_public(Recipe $recipe): Response
+    {
+        return $this->render("recipe/show.html.twig", [
+            "recipe" => $recipe
         ]);
     }
 
