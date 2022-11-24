@@ -9,10 +9,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class DashboardController extends AbstractDashboardController
 {
     #[Route('/admin', name: 'admin')]
+    #[IsGranted("ROLE_ADMIN")]
     public function index(): Response
     {
         // return parent::index();
@@ -44,8 +46,11 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-user', User::class);
-        yield MenuItem::linkToCrud('Demande de contacts', 'fas fa-envelope', Contact::class);
+        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home')
+                        ->setPermission("ROLE_ADMIN");
+        yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-user', User::class)
+                        ->setPermission('ROLE_ADMIN');
+        yield MenuItem::linkToCrud('Demande de contacts', 'fas fa-envelope', Contact::class)
+                        ->setPermission('ROLE_ADMIN');
     }
 }

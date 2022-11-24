@@ -25,6 +25,7 @@ class ContactCrudController extends AbstractCrudController
                     ->setEntityLabelInSingular('Contact')
                     ->setPageTitle("index","Symrecipe -Administration des demandes de contact")
                     ->addFormTheme("@FOSCKEditor/Form/ckeditor_widget.html.twig")
+                    ->setEntityPermission('ROLE_ADMIN')
         ;
     } 
     

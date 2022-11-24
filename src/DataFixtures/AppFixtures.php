@@ -25,6 +25,19 @@ class AppFixtures extends Fixture
     {
         // Users
         $users = []; 
+
+        $admin = new User();
+        $admin->setFullName("Admin_symrecipe")
+                ->setEmail("admin@symrecipe.com")
+                ->setPseudo(null)
+                ->setRoles(["ROLE_USER","ROLE_ADMIN"])
+                ->setPlainPassword("password")
+        ;
+
+        $users[] = $admin;
+
+        $manager->persist($admin);
+
         for ($i=0; $i < 10; $i++) 
         { 
             $user = new User();
