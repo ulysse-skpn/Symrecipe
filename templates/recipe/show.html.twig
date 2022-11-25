@@ -17,6 +17,11 @@
             <span class="badge bg-secondary my-3">Note : {{ recipe.average|number_format(1) }} / 5</span>
         {% endif %}
         
+        {% if recipe.imageName %}            
+            <div class="recipe_image">
+                <img src="{{ vich_uploader_asset(recipe, 'imageFile')}}" alt="image de la recette" style="max-width:500px">
+            </div>
+        {% endif %}
 
         {% if recipe.time %}
             <legend>Temps : {{ recipe.time|min_to_hour }}</legend>

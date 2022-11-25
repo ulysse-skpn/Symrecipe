@@ -17,7 +17,12 @@
                 {% for recipe in recipes %}
                     <a href="{{ path('recipe.show', {id: recipe.id}) }}">             
                         <div class="card border-success mb-3 text-dark" style="max-width: 20rem; max-height:15rem; overflow:hidden">
+                            {% if app.user.id == recipe.user.id  %}
+                            <div class="card-header bg-primary text-white">Ma recette</div>
+                            {% else %}
                             <div class="card-header">Auteur : {{ recipe.user.fullName }}</div>
+                            {% endif %}
+                            
                             <div class="card-body">
                                 <h5 class="card-title">{{ recipe.name|capitalize }}</h5>
                                 <p class="card-text">{{ recipe.instructions|slice(0,100) ~ "..." }}</p>
