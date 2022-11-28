@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 
 class RecipeController extends AbstractController
@@ -223,13 +223,11 @@ class RecipeController extends AbstractController
     }
 
     #[Route('/recipe/public/{nbRecipes}', name: 'recipe.public', methods:['GET'], defaults:["nbRecipes" => 20])]
-    public function index_public(PaginatorInterface $paginator, RecipeRepository $repository, Request $request, int $nbRecipes): Response
+    public function index_public(PaginatorInterface $paginator, RecipeRepository $repository, Request $request, CacheInterface $cacheInterface, int $nbRecipes): Response
     {
-        $cache = new FilesystemAdapter();
-        $data = $cache->get("public_recipes", function( ItemInterface $itemInterface ) use ($repository, $nbRecipes)
-        {
-            $itemInterface->expiresAfter(60 * 60 * 24); // int in seconds, here cache expires after one day
-            $repository->findPublicRecipe($nbRecipes);
+        $data = $cacheInterface->get('recipes', function(ItemInterface $itemInterface) use($repository,$nbRecipes){
+            $itemInterface->expiresAfter(60 * 60 * 24);
+            return $repository->findPublicRecipe($nbRecipes);
         });
 
         $recipes = $paginator->paginate(

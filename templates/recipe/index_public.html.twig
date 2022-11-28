@@ -40,7 +40,7 @@
                             {% else %}
                                 <div class="card-header d-flex justify-content-between">
                             {% endif %}
-                                    <span>Auteur : {{ recipe.user.id == app.user.id ? "Ma recette" : recipe.user.fullName }}</span>
+                                    <span>{{ recipe.user.id == app.user.id ? "Ma recette" : "Auteur : " ~ recipe.user.fullName }}</span>
                                     {% if recipe.average  %}
                                         <span>Note : {{ recipe.average|number_format(1) }}</span>
                                     {% endif %}
