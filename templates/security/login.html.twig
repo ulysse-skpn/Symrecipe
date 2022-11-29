@@ -15,7 +15,7 @@
             <div class="alert alert-danger mt-4">{{ error.messageKey | trans(error.messageData, 'security') }}</div>
         {% endif %}
 
-        <form action="{{ path('security.login') }}" method="post">
+        <form action="{{ path('security.login') }}" method="post" name="login">
                 <fieldset>
                     <legend>Formulaire de connexion</legend>
                     <div class="form-group">

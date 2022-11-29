@@ -4,36 +4,16 @@
 
 {% block body %}
     <div class="container">
-        {% if app.user %}
-            <legend class="my-4">Dernière(s) recettes ajoutée(s)</legend>
+        
+        <h2>Page d'accueil</h2>
 
-            {% for label, messages in app.flashes %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ label }}">{{ message }}</div>
-                {% endfor %}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">{{ message }}</div>
             {% endfor %}
+        {% endfor %}
 
-            <div class="d-flex flex-wrap justify-content-between">           
-                {% for recipe in recipes %}
-                    <a href="{{ path('recipe.show', {id: recipe.id}) }}">             
-                        <div class="card border-success mb-3 text-dark" style="max-width: 20rem; max-height:15rem; overflow:hidden">
-                            {% if app.user.id == recipe.user.id  %}
-                            <div class="card-header bg-primary text-white">Ma recette</div>
-                            {% else %}
-                            <div class="card-header">Auteur : {{ recipe.user.fullName }}</div>
-                            {% endif %}
-                            
-                            <div class="card-body">
-                                <h5 class="card-title">{{ recipe.name|capitalize }}</h5>
-                                <p class="card-text">{{ recipe.instructions|slice(0,100) ~ "..." }}</p>
-                            </div>
-                        </div>
-                    </a>
-                {% endfor %}
-            </div>
-        {% else %}
-            <h2>Page d'accueil</h2>
-
+        {% if app.user == null %}        
             <p>
                 Symrecipe est une application qui permet de créer des recettes à base d'ingrédients que l'on pourra créer et ces recettes pourront être partagé à la communauté
             </p>
@@ -48,5 +28,35 @@
 
             <a href="{{ path('security.login') }}"><button class="btn btn-warning">Connexion</button></a>
         {% endif %}
+
+        <hr>
+
+        <legend class="my-4">Dernière(s) recettes ajoutée(s)</legend>
+
+        <div class="d-flex flex-wrap justify-content-between">           
+            {% for recipe in recipes %}
+                
+                {% if app.user  %}
+                <a href="{{ path('recipe.show', {id: recipe.id}) }}">   {# If connected User #}        
+                {% else %}
+                <a href="{{ path('recipe.show.public', {id: recipe.id}) }}">    {# If anonymous User #}        
+                {% endif %}
+                
+                <div class="card border-success mb-3 text-dark recipes" style="max-width: 20rem; max-height:15rem; overflow:hidden">
+                    {% if app.user and app.user.id == recipe.user.id  %}
+                    <div class="card-header bg-primary text-white">Ma recette</div>
+                    {% else %}
+                    <div class="card-header">Auteur : {{ recipe.user.fullName }}</div>
+                    {% endif %}
+                    
+                    <div class="card-body">
+                        <h5 class="card-title">{{ recipe.name|capitalize }}</h5>
+                        <p class="card-text">{{ recipe.instructions|slice(0,100) ~ "..." }}</p>
+                    </div>
+                </div>
+                </a>
+            {% endfor %}
+        </div>
+
     </div>
 {% endblock %}

@@ -225,13 +225,20 @@ class RecipeController extends AbstractController
     #[Route('/recipe/public/{nbRecipes}', name: 'recipe.public', methods:['GET'], defaults:["nbRecipes" => 20])]
     public function index_public(PaginatorInterface $paginator, RecipeRepository $repository, Request $request, CacheInterface $cacheInterface, int $nbRecipes): Response
     {
-        $data = $cacheInterface->get('recipes', function(ItemInterface $itemInterface) use($repository,$nbRecipes){
-            $itemInterface->expiresAfter(60 * 60 * 24);
-            return $repository->findPublicRecipe($nbRecipes);
-        });
+        //! Using cache doesn't return the recipe user
+        // $data = $cacheInterface->get('recipes', function(ItemInterface $itemInterface) use($repository,$nbRecipes){
+        //     $itemInterface->expiresAfter(60 * 60 * 24);
+        //     return $repository->findPublicRecipe($nbRecipes);
+        // });
+
+        // $recipes = $paginator->paginate(
+        //     $data,
+        //     $request->query->getInt('page',1),
+        //     10
+        // );
 
         $recipes = $paginator->paginate(
-            $data,
+            $repository->findPublicRecipe($nbRecipes),
             $request->query->getInt('page',1),
             10
         );

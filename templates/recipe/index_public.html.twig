@@ -17,11 +17,11 @@
                     <a href="{{ path('recipe.show.public', {id: recipe.id}) }}">  
                     {% endif %}
 
-                        <div class="card border-success mb-3 text-dark" style="max-width: 20rem;"> 
+                        <div class="card border-success mb-3 text-dark " style="width:20rem;max-width:20rem"> 
 
                             {# If user is not connected #}
                             {% if app.user == null %}
-                                <div class="card-header d-flex justify-content-between">
+                                <div class="card-header">
                                     <span>Auteur : {{ recipe.user.fullName }}</span>
                                     {% if recipe.average  %}
                                         <span>Note : {{ recipe.average|number_format(1) }}</span>
@@ -36,9 +36,9 @@
                             
                             {# If user is connected #}
                             {% if app.user and app.user.id == recipe.user.id  %}
-                                <div class="card-header bg-primary text-light d-flex justify-content-between">
+                                <div class="card-header bg-primary text-light">
                             {% else %}
-                                <div class="card-header d-flex justify-content-between">
+                                <div class="card-header">
                             {% endif %}
                                     <span>{{ recipe.user.id == app.user.id ? "Ma recette" : "Auteur : " ~ recipe.user.fullName }}</span>
                                     {% if recipe.average  %}
