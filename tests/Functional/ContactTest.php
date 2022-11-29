@@ -17,6 +17,13 @@ class ContactTest extends WebTestCase
         $this->assertSelectorTextContains('legend', 'Formulaire de contact');
 
         // Récupérer le formulaire
+        // Soumettre le formulaire
+        // Vérifier le statut HTTP
+        // Vérifier l'envoi du mail (queued)
+        // Vérifier la présence du message de succès
+
+
+        //* Récupérer le formulaire
         $submitButton = $crawler->selectButton("Envoyer");
         $form = $submitButton->form();
 
@@ -25,17 +32,17 @@ class ContactTest extends WebTestCase
         $form["contact[subject]"] = "Sujet de la demande de contact";
         $form["contact[message]"] = "Message de la demande de contact";
 
-        // Soumettre le formulaire
+        //* Soumettre le formulaire
         $client->submit($form);
 
-        // Vérifier le statut HTTP
+        //* Vérifier le statut HTTP
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
 
-        // Vérifier l'envoi du mail (queued)
+        //* Vérifier l'envoi du mail (queued)
         $this->assertQueuedEmailCount(1);
 
         $client->followRedirect();
-        // Vérifier la présence du message de succès
+        //* Vérifier la présence du message de succès
 
         $this->assertSelectorTextContains(
             'div.alert.alert-success',
